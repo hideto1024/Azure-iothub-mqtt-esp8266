@@ -1,6 +1,6 @@
 #include "AzureIoTHub.h"
 
-WiFiClientSecure tlsClient;
+//WiFiClientSecure tlsClient;
 
 CloudConfig cloud;
 
@@ -24,6 +24,9 @@ void AzureIoTHub::begin(String cs){
 	cloud.hubUser= GetStringValue((String)cloud.host + "/" + (String)cloud.id);
 	cloud.fullSas = GetStringValue(createIotHubSas(cloud.key, urlEncode(cloud.host) + "/devices/" + (String)cloud.id));
 	cloud.getUrl = GetStringValue("devices/" + (String)cloud.id + "/messages/devicebound/#");
+#ifdef ESP8266
+	espClient.setInsecure();
+#endif
 	mqtt.setServer(cloud.host, 8883);
 }
 
